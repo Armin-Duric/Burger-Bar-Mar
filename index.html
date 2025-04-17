@@ -1,0 +1,478 @@
+<script type="text/javascript">
+        var gk_isXlsx = false;
+        var gk_xlsxFileLookup = {};
+        var gk_fileData = {};
+        function loadFileData(filename) {
+        if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
+            try {
+                var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
+                var firstSheetName = workbook.SheetNames[0];
+                var worksheet = workbook.Sheets[firstSheetName];
+
+                // Convert sheet to JSON to filter blank rows
+                var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
+                // Filter out blank rows (rows where all cells are empty, null, or undefined)
+                var filteredData = jsonData.filter(row =>
+                    row.some(cell => cell !== '' && cell !== null && cell !== undefined)
+                );
+
+                // Convert filtered JSON back to CSV
+                var csv = XLSX.utils.aoa_to_sheet(filteredData); // Create a new sheet from filtered array of arrays
+                csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
+                return csv;
+            } catch (e) {
+                console.error(e);
+                return "";
+            }
+        }
+        return gk_fileData[filename] || "";
+        }
+        </script><!DOCTYPE html>
+<html lang="hr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Burger Bar Mar</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-SgOJa3DmI69IUzQ2PVdRZhwQ+dy64/BUtbMJw1MZ8t5HZApcHrRKUc4W0kG879m7" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .navbar {
+            background-color: #1a1a1a;
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .navbar-brand {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #f2ff78 !important;
+        }
+        .nav-link {
+            color: #f2ff78 !important;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #e74c3c !important;
+        }
+        .hero {
+            background-image: url("./images/background.png");
+            background-size: cover;
+            background-position: center;
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #f2ff78 !important;
+        }
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .hero p {
+            font-size: 1.5rem;
+            font-weight: 400;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #000000;
+            margin: 40px 0 20px;
+        }
+        .menu-item {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 15px 0;
+            padding: 15px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        .menu-item img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-right: 20px;
+        }
+        .menu-item h5 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 0;
+        }
+        .menu-item .price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #e74c3c;
+            margin-left: auto;
+        }
+        .menu-item p {
+            font-size: 0.9rem;
+            color: #666;
+            margin: 5px 0 0;
+        }
+        .footer {
+            background-color: #1a1a1a;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+        .footer p {
+            margin: 0;
+            font-size: 1rem;
+        }
+        .hero > h2 {
+            color: #f2ff78 !important;
+        }
+        .img {
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand round" href="/"><img class="img" src="./images/Logo.jpg" alt="" height="80px" width="80px">Burger Bar Mar</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#burgers">Burgers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#extra">Extra Ponuda</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#dodaci">Dodaci</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero">
+        <div>
+            <h1>Burger Bar Mar</h1>
+            <p>Uvijek tu za vas!</p>
+            <h2>Dostava 062-806-265</h2>
+        </div>
+    </div>
+
+    <!-- Burgers Section -->
+    <section id="burgers">
+        <h2 class="section-title">BURGERI</h2>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <img src="img/burger1.jpg" alt="Šiša Burger">
+                        <div>
+                            <h5>ŠIŠA BURGER</h5>
+                            <p>Pecivo, burger sos, goveda pljeskavica, sir edamer, govedi pršut, jaje, zelena salata, paradajz, luk, pomfrit, kupus salata</p>
+                        </div>
+                        <span class="price">12.00 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <img src="img/burger2.jpg" alt="Fenomenalac">
+                        <div>
+                            <h5>FENOMENALAC</h5>
+                            <p>Pecivo, burger sos, goveda pljeskavica, zelena salata, paradajz, luk, pomfrit, kupus salata</p>
+                        </div>
+                        <span class="price">8.50 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <img src="img/burger3.jpg" alt="Jednostavno & Ukusno">
+                        <div>
+                            <h5>JEDNOSTAVNO & UKUSNO</h5>
+                            <p>Pecivo, burger sos, goveda pljeskavica, zelena salata, paradajz, luk, pomfrit, kupus salata</p>
+                        </div>
+                        <span class="price">7.50 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <img src="img/burger4.jpg" alt="Zacini Svoj Život">
+                        <div>
+                            <h5>ZACINI SVOJ ŽIVOT</h5>
+                            <p>Pecivo, burger sos, goveda pljeskavica, tučena ljuta paprika, zelena salata, paradajz, luk, pomfrit, kupus salata</p>
+                        </div>
+                        <span class="price">8.00 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <img src="img/burger5.jpg" alt="Za Obožavatelje Sira">
+                        <div>
+                            <h5>ZA OBOŽAVATELJE SIRA</h5>
+                            <p>Pecivo, burger sos, goveda pljeskavica, cheddar sir, mozzarella, zelena salata, paradajz, luk, pomfrit, kupus salata</p>
+                        </div>
+                        <span class="price">9.00 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <img src="img/burger6.jpg" alt="Dvostruko Više Ljubavi">
+                        <div>
+                            <h5>DVOSTRUKO VIŠE LJUBAVI</h5>
+                            <p>Pecivo, burger sos, dupla goveda pljeskavica, edamer sir, zelena salata, paradajz, luk, pomfrit, kupus salata</p>
+                        </div>
+                        <span class="price">10.00 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <img src="img/burger7.jpg" alt="Hraskavi Djevojački San">
+                        <div>
+                            <h5>HRASKAVI DJEVOJAČKI SAN</h5>
+                            <p>Pecivo, burger sos, pohovani pileći prsa, pohovani sir, zelena salata, paradajz, luk, pomfrit, kupus salata</p>
+                        </div>
+                        <span class="price">10.00 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <img src="img/burger8.jpg" alt="Burger od Pilećih Prsa">
+                        <div>
+                            <h5>BURGER OD PILEĆIH PRSA</h5>
+                            <p>Pecivo, burger sos, pileća prsa, zelena salata, paradajz, luk, pomfrit, kupus salata</p>
+                        </div>
+                        <span class="price">7.50 KM</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Extra Ponuda Section -->
+    <section id="extra">
+        <h2 class="section-title">EXTRA PONUDA</h2>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <img src="img/extra1.jpg" alt="Kraljevski Doručak">
+                        <div>
+                            <h5>KRALJEVSKI DORUČAK</h5>
+                            <p>Uštipci, jaje, viršle, šunka, edamer sir, salata, sos po želji</p>
+                        </div>
+                        <span class="price">8.00 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <img src="img/extra2.jpg" alt="Domaćinski Doručak">
+                        <div>
+                            <h5>DOMAĆINSKI DORUČAK</h5>
+                            <p>Uštipci, kulen, govedi pršut, kiselo vrhnje, suhi sir, salata</p>
+                        </div>
+                        <span class="price">8.00 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <img src="img/extra3.jpg" alt="Zlatna Piletina">
+                        <div>
+                            <h5>ZLATNA PILETINA</h5>
+                            <p>Pohovana piletina, pileća prsa, pomfrit, kupus salata, ajvar/sos po želji</p>
+                        </div>
+                        <span class="price">8.50 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <img src="img/extra4.jpg" alt="Skrivena Šunka">
+                        <div>
+                            <h5>SKRIVENA ŠUNKA</h5>
+                            <p>Pohovana piletina, šunka, sir, pomfrit, kupus salata, ajvar/sos po želji</p>
+                        </div>
+                        <span class="price">8.50 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <img src="img/extra5.jpg" alt="Štapici u Susamu">
+                        <div>
+                            <h5>ŠTAPICI U SUSAMU</h5>
+                            <p>Pecivo, pileća prsa u susamu, pomfrit, burger sos/sos po želji</p>
+                        </div>
+                        <span class="price">10.00 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <img src="img/extra6.jpg" alt="Pileći Medaljoni">
+                        <div>
+                            <h5>PILEĆI MEDALJONI</h5>
+                            <p>Pecivo, pohovani komadići piletine, pomfrit, burger sos/sos po želji</p>
+                        </div>
+                        <span class="price">8.00 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <img src="img/extra7.jpg" alt="Pohovani Sir">
+                        <div>
+                            <h5>POHOVANI SIR</h5>
+                            <p>Pohovani edamer sir, pomfrit, burger sos/sos po želji</p>
+                        </div>
+                        <span class="price">7.50 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <img src="img/extra8.jpg" alt="Kobasice za Gurmane">
+                        <div>
+                            <h5>KOBASICE ZA GURMANE</h5>
+                            <p>Pecivo, roštiljska kobasica blaga/ljuta, pomfrit, ajvar/sos po želji</p>
+                        </div>
+                        <span class="price">7.50 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <img src="img/extra9.jpg" alt="Mix Plata">
+                        <div>
+                            <h5>MIX PLATA</h5>
+                            <p>Pecivo, goveda pljeskavica, pileća prsa, kobasice blage/ljute, pomfrit, burger sos/sos po želji</p>
+                        </div>
+                        <span class="price">25.00 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <img src="img/extra10.jpg" alt="Pileći File na Žaru">
+                        <div>
+                            <h5>PILEĆI FILE NA ŽARU</h5>
+                            <p>Pecivo, pileći file, salata, burger sos/sos po želji</p>
+                        </div>
+                        <span class="price">10.00 KM</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dodaci Section -->
+    <section id="dodaci">
+        <h2 class="section-title">DODACI</h2>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <div>
+                            <h5>Pomfrit</h5>
+                        </div>
+                        <span class="price">2.50 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <div>
+                            <h5>Hrskavi krompir</h5>
+                        </div>
+                        <span class="price">3.50 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <div>
+                            <h5>Pljeskavica</h5>
+                        </div>
+                        <span class="price">3.00 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <div>
+                            <h5>Pohovani sir</h5>
+                        </div>
+                        <span class="price">2.50 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <div>
+                            <h5>Pileći file</h5>
+                        </div>
+                        <span class="price">3.00 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <div>
+                            <h5>Sos/Namaz</h5>
+                            <p>bbq sos, burger sos, kary sos, kečap, majoneza, senf, ajvar, kiselo vrhnje</p>
+                        </div>
+                        <span class="price">1.00 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <div>
+                            <h5>Dodatak</h5>
+                            <p>kulen, govedi pršut, šunka, kobasica/viršla, edamer sir, cheddar sir, mozzarella, pečivo</p>
+                        </div>
+                        <span class="price">1.50 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <div>
+                            <h5>Uštipci</h5>
+                        </div>
+                        <span class="price">4.00 KM</span>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="menu-item">
+                        <div>
+                            <h5>Dostava</h5>
+                        </div>
+                        <span class="price">1.00 KM</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Tel: 062-806-265</p>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-o1oVqR7i0L6e5ZJqC5T4kS6b9b1L6e5zJqC5T4kS6b9b1L6e5zJqC5T4kS6b9b1" crossorigin="anonymous"></script>
+    <script>
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
